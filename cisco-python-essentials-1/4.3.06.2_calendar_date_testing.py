@@ -31,10 +31,12 @@ def days_in_month(year, month):
 
 def day_of_year(year, month, day):
     """Returns the written date"""
-    # Checking if either year, month or day is valid
+    # Checking if both year, month and day are valid
     month_days = days_in_month(year, month)
     if year > 1582 and 1 <= month <= 12 and 1 <= day <= month_days:
+        # Written month
         months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+        # Calculating day suffix
         day_str = str(day)
         if day_str.endswith(('11','12','13')):
             suffix = 'th'
