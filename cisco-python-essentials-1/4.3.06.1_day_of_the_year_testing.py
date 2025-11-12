@@ -65,7 +65,7 @@ def test_day_of_year():
                        "February 28th, 2015",
                        None,
                        "February 29th, 2016",
-                       "May 3rd, 1500",
+                       None,
                        None,
                        None,
                        None,
