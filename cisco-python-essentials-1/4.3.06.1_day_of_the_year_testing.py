@@ -34,7 +34,9 @@ def day_of_year(year, month, day):
         # Counting all of the days up until the chosen day
         ord_day = 0  # Ordinal day
         for _ in range(1, month):
+            # Counting all days of the current month
             ord_day += days_in_month(year, _)
+        # Finally counting the chosen days of the chosen month
         ord_day += day
         return ord_day
     else:
