@@ -1,5 +1,5 @@
 def is_year_leap(year):
-    """Returns if an year is leap or not"""
+    """Returns if a year is leap or not"""
     if year < 1582:
         leap = None  # Not within the Gregorian calendar period
     else:
@@ -28,3 +28,5 @@ def test_is_year_leap():
         print(status, end='')
         #print(f" | Result: {output}", end='')
         print()
+
+test_is_year_leap()

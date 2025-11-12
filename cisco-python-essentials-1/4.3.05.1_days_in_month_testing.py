@@ -1,5 +1,5 @@
 def is_year_leap(year):
-    """Returns if an year is leap or not"""
+    """Returns if a year is leap or not"""
     if year < 1582:
         leap = None  # Not within the Gregorian calendar period
     else:
@@ -27,7 +27,7 @@ def days_in_month(year, month):
         return month_days[month - 1]
 
 def test_is_year_leap():
-    sample_input =    [2000,  2015,  1999, 1996, 1580]
+    sample_input = [   2000,  2015,  1999, 1996, 1580]
     expected_output = [True, False, False, True, None]
     print(">>> TESTING is_year_leap()")
     for _ in range(len(sample_input)):
