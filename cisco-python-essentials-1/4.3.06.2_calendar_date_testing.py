@@ -1,3 +1,6 @@
+# This calculates a calendar date insteadf of calculating the ordinal number of the day in a year
+# because the lab activity statement was confusing
+
 def is_year_leap(year):
     """Returns if a year is leap or not"""
     if year < 1582:
@@ -27,6 +30,7 @@ def days_in_month(year, month):
         return month_days[month - 1]
 
 def day_of_year(year, month, day):
+    """Returns the written date"""
     # Checking if either year, month or day is valid
     month_days = days_in_month(year, month)
     if year > 1582 and 1 <= month <= 12 and 1 <= day <= month_days:
