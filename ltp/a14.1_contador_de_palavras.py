@@ -61,14 +61,14 @@ def testa_contar_palavra():
 
         print(f"Frase: {frase}\nPalavra: {palavra}")
 
-        resultado = contar_palavra(frase, palavra)
-        if resultado == esperado:
+        output = contar_palavra(frase, palavra)
+        if output == esperado:
             estado = "OK"
         else:
             estado = "Falhou"
         
         print(f"Estado: {estado} ", end='')
-        #print(f"| Resultado: {resultado}", end='')
+        #print(f"| Resultado: {output}", end='')
         print('\n' + '-' * 30)
 
 # Debugging
