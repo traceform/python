@@ -71,6 +71,9 @@ def testa_contar_palavra():
         #print(f"| Resultado: {resultado}", end='')
         print('\n' + '-' * 30)
 
+# Debugging
+#testa_contar_palavra()
+
 if __name__ == "__main__":
     frase, palavra = receber_dados()
     qtd_ocorrencias = contar_palavra(frase, palavra)
@@ -83,6 +86,3 @@ if __name__ == "__main__":
         print(f"A palavra '{palavra}' foi encontrada {qtd_ocorrencias} {subst}.")
     else:
         print(f"A palavra '{palavra}' não foi encontrada!")
-    
-    # Debugging
-    #testa_contar_palavra()
