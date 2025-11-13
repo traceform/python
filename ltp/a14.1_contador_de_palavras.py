@@ -1,4 +1,7 @@
-def recebe_dados():
+# Importando biblioteca de Expressões Regulares
+import re
+
+def receber_dados():
     """Recebe a frase e a palavra"""
     while True:
         try:
@@ -12,6 +15,7 @@ def recebe_dados():
     while True:
         try:
             palavra = input("Digite uma palavra: ")
+            # Verificando se é só 1 palavra
             if len(palavra.split()) > 1:
                 raise Exception("Digite apenas 1 palavra!")
             break
@@ -24,11 +28,12 @@ def recebe_dados():
             print("Algo deu errado. Tente novamente! ")
     return frase, palavra
 
-def conta_palavra(frase, palavra):
+def contar_palavra(frase, palavra):
     """Conta as ocorrências de uma palavra numa frase"""
-    # Sanitizando a frase e removendo alguns caracteres especiais
-    # SUBSTITUIR POR EXPRESSÕES REGULARES
-    frase = frase.replace(',','').replace('.','').replace(':', '').replace(';', '').replace('!','').replace('?','').lower().split()
+    # Removendo a pontuação ".,;:?!—/\()[]{} e sanitizando a frase
+    frase = re.sub(r"[\".,;:?!—/\\()[\]{}]", '', frase).lower().split()
+
+    # Deixando a palavra em minúsculo
     palavra = palavra.strip().lower()
 
     # Debugging
@@ -42,32 +47,42 @@ def conta_palavra(frase, palavra):
     else:
         return None
 
-def testa_conta_palavra():
-    input_frase = ["O tempo passa... e os seus sonhos, ainda estão no papel?", "A vida é arte, artesão"]
-    input_palavra = ['sonhos', 'arte']
-    esperado = [1, 1]
+def testa_contar_palavra():
+    # Listas de amostras de conteúdo para testar
+    input_frase = ["O tempo passa... e os seus sonhos, ainda estão no papel?", "A vida é arte, artesão", "Oi, como vai?"]
+    input_palavra = ['Sonhos', 'arte', 'vai']
+    output_esperado = [1, 1, 1]
+
     print(">>> TESTANDO conta_plavra()")
-    for _ in range(len(esperado)):
+    for _ in range(len(output_esperado)):
         frase = input_frase[_]
         palavra = input_palavra[_]
+        esperado = output_esperado[_]
+
         print(f"Frase: {frase}\nPalavra: {palavra}")
-        resultado = conta_palavra(frase, palavra)
-        if resultado == esperado[_]:
+
+        resultado = contar_palavra(frase, palavra)
+        if resultado == esperado:
             estado = "OK"
         else:
             estado = "Falhou"
+        
         print(f"Estado: {estado} ", end='')
-        print(f"| Resultado: {resultado}", end='')
-        print()
+        #print(f"| Resultado: {resultado}", end='')
+        print('\n' + '-' * 30)
 
 if __name__ == "__main__":
-    frase, palavra = recebe_dados()
-    qtd_ocorrencias = conta_palavra(frase, palavra)
+    frase, palavra = receber_dados()
+    qtd_ocorrencias = contar_palavra(frase, palavra)
 
     if qtd_ocorrencias:
-        print(f"A palavra {palavra} foi encontrada {qtd_ocorrencias} vezes.")
+        if qtd_ocorrencias == 1:
+            subst = 'vez'
+        else:
+            subst = 'vezes'
+        print(f"A palavra '{palavra}' foi encontrada {qtd_ocorrencias} {subst}.")
     else:
-        print(f"A palavra {palavra} não foi encontrada!")
+        print(f"A palavra '{palavra}' não foi encontrada!")
     
     # Debugging
-    #testa_conta_palavra()
+    #testa_contar_palavra()
