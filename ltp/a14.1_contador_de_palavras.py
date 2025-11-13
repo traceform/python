@@ -50,8 +50,8 @@ def contar_palavra(frase, palavra):
 def testa_contar_palavra():
     # Listas de amostras de conteúdo para testar
     input_frase = ["O tempo passa... e os seus sonhos, ainda estão no papel?", "A vida é arte, artesão", "Oi, como vai?"]
-    input_palavra = ['Sonhos', 'arte', 'vai']
-    output_esperado = [1, 1, 1]
+    input_palavra = [                                                'Sonhos',                   'arte',           'vai']
+    output_esperado = [                                                     1,                        1,               1]
 
     print(">>> TESTANDO conta_plavra()")
     for _ in range(len(output_esperado)):
