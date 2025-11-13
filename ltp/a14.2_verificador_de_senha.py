@@ -30,9 +30,9 @@ def verificar_senha(senha):
                         return True
         return False
 
-def testa_verificar_senha():
-    input_amostras = ['1', '12345678', '123456789', '123456789aaa', '123456789AAA', '123456789aaaAAA', '123456789aaaAAA#%$!', 'S#nh4@$T1']
-    output_esperado = [False, False, False, False, False, False, True, True]
+def testar_verificar_senha():
+    input_amostras = [   '1', '12345678', '123456789', '123456789aaa', '123456789AAA', '123456789aaaAAA', '123456789aaaAAA#%$!', 'S#nh4@$T1']
+    output_esperado = [False,      False,       False,          False,          False,             False,                  True,        True]
 
     print(f">>> TESTANDO verificar_senha()")
     for _ in range(len(output_esperado)):
@@ -47,17 +47,17 @@ def testa_verificar_senha():
             estado = "Falhou"
 
         print(estado, end='')
-        print(f" | Resultado: {output}", end='')
+        #print(f" | Resultado: {output}", end='')
         print()
 
 # Debugging
-#testa_verificar_senha()
+#testar_verificar_senha()
 
 if __name__ == "__main__":
     senha = receber_dados()
     forca = verificar_senha(senha)
     if forca:
-        print(f"A senha é forte!")
+        print(f"A senha é forte.")
     else:
         print(f"""A senha é fraca! Atente-se às recomendações:
 - Mínimo de 8 caracteres
