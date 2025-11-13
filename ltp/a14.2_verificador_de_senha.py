@@ -31,23 +31,23 @@ def verificar_senha(senha):
         return False
 
 def testa_verificar_senha():
-    amostras_input = ['1', '12345678', '123456789', '123456789aaa', '123456789AAA', '123456789aaaAAA', '123456789aaaAAA#%$!', 'S#nh4@$T1']
-    esperado = [False, False, False, False, False, False, True, True]
+    input_amostras = ['1', '12345678', '123456789', '123456789aaa', '123456789AAA', '123456789aaaAAA', '123456789aaaAAA#%$!', 'S#nh4@$T1']
+    output_esperado = [False, False, False, False, False, False, True, True]
 
     print(f">>> TESTANDO verificar_senha()")
-    for _ in range(len(esperado)):
-        input = amostras_input[_]
+    for _ in range(len(output_esperado)):
+        input = input_amostras[_]
 
         print(f"{input} -> ", end='')
 
-        resultado = verificar_senha(input)
-        if resultado == esperado[_]:
+        output = verificar_senha(input)
+        if output == output_esperado[_]:
             estado = "OK"
         else:
             estado = "Falhou"
 
         print(estado, end='')
-        print(f" | Resultado: {resultado}", end='')
+        print(f" | Resultado: {output}", end='')
         print()
 
 # Debugging
