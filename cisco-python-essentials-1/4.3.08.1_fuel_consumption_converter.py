@@ -3,8 +3,8 @@ GALLON_IN_LITERS = 3.785411784
 
 def liters_100km_to_miles_gallon(liters_per_100km):
     """Converts the liters per 100km rate (L/100KM) to miles per gallon (MPG)"""
-    miles_traveled = 100 / MILE_IN_KM
     gallons_consumed = liters_per_100km / GALLON_IN_LITERS
+    miles_traveled = 100 / MILE_IN_KM
     return miles_traveled / gallons_consumed
 
 def miles_gallon_to_liters_100km(mpg):
