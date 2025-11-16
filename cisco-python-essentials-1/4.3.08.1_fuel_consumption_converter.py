@@ -1,4 +1,4 @@
-MILE_IN_KM = 1.609344  # 1 mile = 1609.344 meters so 1.609344 kilometers
+MILE_IN_KM = 1609.344 / 1000  # 1 mile = 1609.344 meters so 1.609344 kilometers (which is 1609.344 / 1000)
 GALLON_IN_LITERS = 3.785411784
 
 def liters_100km_to_miles_gallon(liters_per_100km):
