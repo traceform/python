@@ -70,6 +70,7 @@ def receive_input(
             print("Invalid weight, try again.")
         except KeyboardInterrupt:
             print("\nProgram terminated.")
+            quit()
 
     # Validating height input
     while True:
