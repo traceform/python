@@ -8,7 +8,9 @@ logging.basicConfig(
     format="[%(levelname)s] %(message)s"
 )
 
-def bmi(weight: float, height: float) -> float:
+
+# --- Utility functions ---
+def bmi(weight: float, height: float) -> float | None:
     """
     Calculates the Body Mass Index based on
     given weight (kg) and height (meters)
@@ -22,10 +24,43 @@ def bmi(weight: float, height: float) -> float:
                 return weight / (height ** 2)
             except ZeroDivisionError:
                 return None
-        raise Exception(f"ERROR: Invalid data. The given data is invalid biologically.")
+        raise Exception(f"ERROR: Invalid data. The given data is biologically invalid for adults.")
     return None
 
-def receive_input(option: int, weight_text: str, height_text: str):
+def lb_to_kg(pounds: float) -> float:
+    """Converts pounds to kilograms"""
+    logging.debug(f"pounds: {pounds}, type: {type(pounds)}")
+    return pounds * 0.45359237
+
+def ft_and_inch_to_m(feet: int, inches: int = 0) -> float:
+    """Converts feet and inches to meters"""
+    logging.debug(f"feet: {feet}, type: {type(feet)} | inches: {inches}, type: {type(inches)}")
+    return feet * 0.3048 + inches * 0.0254
+
+def classify_bmi(bmi: float) -> str:
+    """Resurns the respective BMI classification"""
+    if bmi < 18.5:
+        return "Underweight"
+    elif bmi < 25:
+        return "Normal weight"
+    elif bmi < 30:
+        return "Overweight"
+    elif bmi < 35:
+        return "Obesity Class I"
+    elif bmi < 40:
+        return "Obesity Class II"
+    else:
+        return "Obesity Class III"
+
+
+# --- Input/output functions ---
+def receive_input(
+    option: int,
+    weight_text: str,
+    height_text: str
+) -> tuple[float, float] | tuple[float, int, int] | None:
+
+    """Receives and parses the user inputted weight and height values"""
     # Validating weight input
     while True:
         try:
@@ -41,7 +76,7 @@ def receive_input(option: int, weight_text: str, height_text: str):
         try:
             msg = ''
             height = input(f"Enter your height in {height_text}: ")
-            logging.debug(f"Height result after input: {height}")
+            logging.debug(f"Height bmi_result after input: {height}")
             # Depending on the option chosen, different things happen
             if option == 1:
                 height = float(height)
@@ -49,7 +84,7 @@ def receive_input(option: int, weight_text: str, height_text: str):
             elif option == 2:
                 # Selecting only the numbers in the string, in order
                 height = re.findall(r"\d+", height)
-                logging.debug(f"Height result after regex: {height}")
+                logging.debug(f"Height bmi_result after regex: {height}")
                 # Checking if only 2 values were inputted at most
                 if len(height) == 1:
                     height.append(0)
@@ -73,18 +108,8 @@ def receive_input(option: int, weight_text: str, height_text: str):
         
     return weight, height
 
-def lb_to_kg(pounds: float) -> float:
-    """Converts pounds to kilograms"""
-    logging.debug(f"pounds: {pounds}, type: {type(pounds)}")
-    return pounds * 0.45359237
-
-def ft_and_inch_to_m(feet: int, inches: int = 0) -> float:
-    """Converts feet and inches to meters"""
-    logging.debug(f"feet: {feet}, type: {type(feet)} | inches: {inches}, type: {type(inches)}")
-    return feet * 0.3048 + inches * 0.0254
-
-def choose_option(options: list, prompt: str, default_option = 1):
-    """Returns a valid option to continue"""
+def choose_option(options: list, prompt: str, default_option = 1) -> int:
+    """Receives and returns a valid option to continue"""
     _ = 'n'
 
     print(prompt)
@@ -125,41 +150,47 @@ def test_bmi():
             status = 'Failed'
         
         print(status, end='')
-        print(f" | Result: {output}", end='')
+        print(f" | bmi_result: {output}", end='')
         print()
 
+
+# --- Master Section ---
 def master():
     try:
         if option == 0:
             print("\n>>> AUTOMATIC TESTING MODE ACTIVE")
             test_bmi()
             quit()
-        if option == 1:
+        elif option == 1:
             weight, height = receive_input(option, 'kilograms', 'meters')
             logging.debug(f"option 1 > receive_input() returned weight: {weight} | height: {height}")
-            result = bmi(weight, height)
+            bmi_result = bmi(weight, height)
+            logging.debug(f"option 1 > bmi_result() returned bmi: {bmi_result}")
         elif option == 2:
             weight, height_feet, height_inches = receive_input(option, 'pounds', 'feet (inches is optional)')
             logging.debug(f"option 2 > receive_input() returned weight: {weight} | height feet: {height_feet} | height inches: {height_inches}")
             weight, height = lb_to_kg(weight), ft_and_inch_to_m(height_feet, height_inches)
             logging.debug(f"option 2 > lb_to_kg() returned weight: {weight}")
             logging.debug(f"option 2 > ft_and_inch_to_m() returned height: {height}")
-            result = bmi(weight, height)
+            bmi_result = bmi(weight, height)
+            logging.debug(f"option 2 > bmi_result() returned bmi: {bmi_result}")
         else:
-            result = 'fuck'
+            bmi_result = None
 
-        if result:
-            print(result)
+        if bmi_result:
+            category = classify_bmi(bmi_result)
+            print(f"BMI = {bmi_result:.2f}, Category = {category}")
         else:
             raise Exception(f"ERROR: Invalid data.")
     except Exception as e:
         print(e)
 
+    sleep(2)
+
 if __name__ == "__main__":
-    while True:
-        try:
-            OPTIONS = [0, 1, 2, 9]
-            menu = """
+    DEBUGGING_ON = False
+    OPTIONS = [0, 1, 2, 9]
+    menu = """
 ===== BODY MASS INDEX CALCULATOR =====
 
 Choose the measurement unit:
@@ -169,14 +200,23 @@ Choose the measurement unit:
 CTRL-C to quit
 ======================================"""
 
+    while True:
+        try:
             option = choose_option(OPTIONS, menu)
 
-            if option == 9:
+            if option == 9 and not DEBUGGING_ON:
                 logging.getLogger().setLevel(logging.DEBUG)
                 print("\n>>> DEBUGGING MODE ACTIVE")
+                print("Restart the program to deactivate.")
+
                 option = choose_option(OPTIONS, '')
-            master()
-            sleep(2)
+
+            round = 0
+            while True:
+                if round > 0:
+                    option = choose_option(OPTIONS, menu)
+                master()
+                round += 1
         except KeyboardInterrupt:
             print(f"\nProgram terminated.")
             quit()
