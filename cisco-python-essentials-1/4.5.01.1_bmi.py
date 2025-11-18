@@ -185,7 +185,7 @@ def master():
     except Exception as e:
         print(e)
 
-    sleep(2)
+    sleep(3)
 
 if __name__ == "__main__":
     DEBUGGING_ON = False
