@@ -123,7 +123,7 @@ def test_bmi():
         print(f" | Result: {output}", end='')
         print()
 
-def main_debug():
+def master_debug():
     print("\n>>> DEBUGGING MODE ACTIVE")
     print(f"[DEBUG] choose_option() returned option: {option}")
     if option == 0:
@@ -146,7 +146,7 @@ def main_debug():
     print(result)
     quit()
 
-def main():
+def master():
     if option == 0:
         while True:
             try:
