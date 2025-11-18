@@ -4,7 +4,7 @@ from time import sleep
 
 # Basic logging configuration
 logging.basicConfig(
-    level=logging.INFO,   # Show debug and above
+    level=logging.INFO,   # Change to show debug and above
     format="[%(levelname)s] %(message)s"
 )
 
@@ -38,7 +38,7 @@ def ft_and_inch_to_m(feet: int, inches: int = 0) -> float:
     return feet * 0.3048 + inches * 0.0254
 
 def classify_bmi(bmi: float) -> str:
-    """Resurns the respective BMI classification"""
+    """Returns the respective BMI classification"""
     if bmi < 18.5:
         return "Underweight"
     elif bmi < 25:
