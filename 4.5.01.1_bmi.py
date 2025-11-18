@@ -17,6 +17,7 @@ def bmi(weight, height):
     return None
 
 def receive_input(option, weight_text, height_text):
+    # Validating weight input
     while True:
         try:
             weight = float(input(f"Enter your weight in {weight_text}: "))
@@ -26,27 +27,38 @@ def receive_input(option, weight_text, height_text):
         except KeyboardInterrupt:
             print("\nProgram terminated.")
 
+    # Validating height input
     while True:
         try:
+            msg = ''
             height = input(f"Enter your height in {height_text}: ")
+            #print(f"[DEBUG] Height result after input: {height}")
+            # Depending on the option chosen, different things happen
             if option == 1:
                 height = float(height)
                 break
             elif option == 2:
-                # Removing special characters, making a list of unique characters
-                height = set(re.sub(r"[^0-9]", ' ', height).split()).discard(' ')
-                # Keeping only the integers
-                valid_integers = []
-                for _ in height:
-                    if isinstance(int(_), int):
-                        valid_integers.append(_)
-                if 0 >= len(valid_integers) >= 3:
+                # Selecting only the numbers in the string, in order
+                height = re.findall(r"\d+", height)
+                #print(f"[DEBUG] Height result after regex: {height}")
+                # Checking if only 2 values were inputted at most
+                if len(height) == 1:
+                    height.append(0)
+                if len(height) == 2:
+                    for _ in range(len(height)):
+                        # Validating the numbers as integers
+                        if isinstance(int(_), int):
+                            # Replacing list items with the integers
+                            height[_] = int(height[_])
+                    #print(f"[DEBUG] Height after type casting: {height}")
+                    return weight, height[0], height[1]
+                else:
+                    msg = "You entered too many numbers. Minimum is one, maximum is two. Ex.: 5'10\". "
                     raise ValueError
-                return weight, valid_integers[0], valid_integers[1]
             else:
                 return
         except ValueError:
-            print("Invalid height, try again.")
+            print(f"Invalid height. {msg}Try again.")
         except KeyboardInterrupt:
             print("\nProgram terminated.")
         
@@ -54,18 +66,20 @@ def receive_input(option, weight_text, height_text):
 
 def lb_to_kg(pounds):
     """Converts pounds to kilograms"""
+    #print(f"[DEBUG] pounds: {pounds}, type: {type(pounds)}")
     return pounds * 0.45359237
 
 def ft_and_inch_to_m(feet, inches = 0.0):
     """Converts feet and inches to meters"""
+    #print(f"[DEBUG] feet: {feet}, type: {type(feet)} | inches: {inches}, type: {type(inches)}")
     return feet * 0.3048 + inches * 0.0254
 
 def choose_option(options, prompt, number = 1):
     """Returns a valid option to continue"""
     option_list = []
-    for n in range(1, options + 1):
+    for n in range(options + 1):
         option_list.append(n)
-    print(option_list)
+    #print(f"[DEBUG] Result of option_list after for loop based on options argument given: {option_list}")
 
     _ = 'n'
 
@@ -88,9 +102,9 @@ def choose_option(options, prompt, number = 1):
 
 def test_bmi():
     function = bmi
-    sample_weight = [52.5, 352.5]
-    sample_height = [1.65, 1.65]
-    expected_output = [19.283746556473833, None]
+    sample_weight = [                52.5, 352.5,          lb_to_kg(176)]
+    sample_height = [                1.65,  1.65, ft_and_inch_to_m(5, 7)]
+    expected_output = [19.283746556473833,  None,     27.565214082533313]
 
     print(f">>> TESTING {function}")
     for _ in range(len(expected_output)):
@@ -109,23 +123,51 @@ def test_bmi():
         print(f" | Result: {output}", end='')
         print()
 
-if __name__ == "__main__":
-    # Debugging
-    #test_bmi()
+def main():
 
-    option = choose_option(2, """
+if __name__ == "__main__":
+    option = choose_option(3, """
 === BODY MASS INDEX CALCULATOR ===
 
 Choose the measurement unit:
-1. Metric: kg, m (Default)
+1. Metric: kilograms, meters (Default)
 2. Imperial: pounds, feet, inches""")
 
+    if option == 0:
+        print(">>> DEBUGGING MODE ACTIVE")
+        option = choose_option(3, """
+    === BODY MASS INDEX CALCULATOR ===
+
+    Choose the measurement unit:
+    1. Metric: kilograms, meters (Default)
+    2. Imperial: pounds, feet, inches""")
+        print(f"[DEBUG] choose_option() returned option: {option}")
+        if option == 0:
+            print(">>> TESTING MODE ACTIVE")
+            test_bmi()
+            quit()
+        if option == 1:
+            weight, height = receive_input(option, 'kilograms', 'meters')
+            print(f"[DEBUG] option 1 > receive_input() returned weight: {weight} | height: {height}")
+            result = bmi(weight, height)
+        elif option == 2:
+            weight, height_feet, height_inches = receive_input(option, 'pounds', 'feet (inches is optional)')
+            print(f"[DEBUG] option 2 > receive_input() returned weight: {weight} | height feet: {height_feet} | height inches: {height_inches}")
+            weight, height = lb_to_kg(weight), ft_and_inch_to_m(height_feet, height_inches)
+            print(f"[DEBUG] option 2 > lb_to_kg() returned weight: {weight}")
+            print(f"[DEBUG] option 2 > ft_and_inch_to_m() returned height: {height}")
+            result = bmi(weight, height)
+        else:
+            result = 'fuck'
+        print(result)
+        quit()
     if option == 1:
         weight, height = receive_input(option, 'kilograms', 'meters')
         result = bmi(weight, height)
     elif option == 2:
         weight, height_feet, height_inches = receive_input(option, 'pounds', 'feet (inches is optional)')
-        result = bmi(lb_to_kg(weight), ft_and_inch_to_m(height_feet, height_inches))
+        weight, height = lb_to_kg(weight), ft_and_inch_to_m(height_feet, height_inches)
+        result = bmi(weight, height)
     else:
         result = 'fuck'
     print(result)
