@@ -1,4 +1,12 @@
 import re
+import logging
+from time import sleep
+
+# Basic logging configuration
+logging.basicConfig(
+    level=logging.INFO,   # Show debug and above
+    format="[%(levelname)s] %(message)s"
+)
 
 def bmi(weight: float, height: float) -> float:
     """
@@ -14,9 +22,10 @@ def bmi(weight: float, height: float) -> float:
                 return weight / (height ** 2)
             except ZeroDivisionError:
                 return None
+        raise Exception(f"ERROR: Invalid data. The given data is invalid biologically.")
     return None
 
-def receive_input(option: int, weight_text: str, height_text: str) -> :
+def receive_input(option: int, weight_text: str, height_text: str):
     # Validating weight input
     while True:
         try:
@@ -32,7 +41,7 @@ def receive_input(option: int, weight_text: str, height_text: str) -> :
         try:
             msg = ''
             height = input(f"Enter your height in {height_text}: ")
-            #print(f"[DEBUG] Height result after input: {height}")
+            logging.debug(f"Height result after input: {height}")
             # Depending on the option chosen, different things happen
             if option == 1:
                 height = float(height)
@@ -40,7 +49,7 @@ def receive_input(option: int, weight_text: str, height_text: str) -> :
             elif option == 2:
                 # Selecting only the numbers in the string, in order
                 height = re.findall(r"\d+", height)
-                #print(f"[DEBUG] Height result after regex: {height}")
+                logging.debug(f"Height result after regex: {height}")
                 # Checking if only 2 values were inputted at most
                 if len(height) == 1:
                     height.append(0)
@@ -50,7 +59,7 @@ def receive_input(option: int, weight_text: str, height_text: str) -> :
                         if isinstance(int(_), int):
                             # Replacing list items with the integers
                             height[_] = int(height[_])
-                    #print(f"[DEBUG] Height after type casting: {height}")
+                    logging.debug(f"Height after type casting: {height}")
                     return weight, height[0], height[1]
                 else:
                     msg = "You entered too many numbers. Minimum is one, maximum is two. Ex.: 5'10\". "
@@ -58,7 +67,7 @@ def receive_input(option: int, weight_text: str, height_text: str) -> :
             else:
                 return
         except ValueError:
-            print(f"Invalid height. {msg}Try again.")
+            print(f"ERROR: Invalid height. {msg}Try again.")
         except KeyboardInterrupt:
             print("\nProgram terminated.")
         
@@ -66,25 +75,19 @@ def receive_input(option: int, weight_text: str, height_text: str) -> :
 
 def lb_to_kg(pounds: float) -> float:
     """Converts pounds to kilograms"""
-    #print(f"[DEBUG] pounds: {pounds}, type: {type(pounds)}")
+    logging.debug(f"pounds: {pounds}, type: {type(pounds)}")
     return pounds * 0.45359237
 
 def ft_and_inch_to_m(feet: int, inches: int = 0) -> float:
     """Converts feet and inches to meters"""
-    #print(f"[DEBUG] feet: {feet}, type: {type(feet)} | inches: {inches}, type: {type(inches)}")
+    logging.debug(f"feet: {feet}, type: {type(feet)} | inches: {inches}, type: {type(inches)}")
     return feet * 0.3048 + inches * 0.0254
 
-def choose_option(options: int, prompt: str, default_option = 1):
+def choose_option(options: list, prompt: str, default_option = 1):
     """Returns a valid option to continue"""
-    option_list = []
-    for n in range(options + 1):
-        option_list.append(n)
-    #print(f"[DEBUG] Result of option_list after for loop based on options argument given: {option_list}")
-
     _ = 'n'
 
     print(prompt)
-
     while True:
         try:
             number = input(f"Choose a{_} option: ")
@@ -93,12 +96,14 @@ def choose_option(options: int, prompt: str, default_option = 1):
                 return default_option
             # If the user inputted value is valid, return value
             number = int(number)
-            if number in option_list:
+            if number in OPTIONS:
                 return number
             else:
                 _ = ' valid'
         except ValueError:
             _ = ' valid'
+        except KeyboardInterrupt:
+            raise KeyboardInterrupt
 
 def test_bmi():
     function = bmi
@@ -123,58 +128,55 @@ def test_bmi():
         print(f" | Result: {output}", end='')
         print()
 
-def master_debug():
-    print("\n>>> DEBUGGING MODE ACTIVE")
-    print(f"[DEBUG] choose_option() returned option: {option}")
-    if option == 0:
-        print("\n>>> AUOMATIC TESTING MODE ACTIVE")
-        test_bmi()
-        quit()
-    if option == 1:
-        weight, height = receive_input(option, 'kilograms', 'meters')
-        print(f"[DEBUG] option 1 > receive_input() returned weight: {weight} | height: {height}")
-        result = bmi(weight, height)
-    elif option == 2:
-        weight, height_feet, height_inches = receive_input(option, 'pounds', 'feet (inches is optional)')
-        print(f"[DEBUG] option 2 > receive_input() returned weight: {weight} | height feet: {height_feet} | height inches: {height_inches}")
-        weight, height = lb_to_kg(weight), ft_and_inch_to_m(height_feet, height_inches)
-        print(f"[DEBUG] option 2 > lb_to_kg() returned weight: {weight}")
-        print(f"[DEBUG] option 2 > ft_and_inch_to_m() returned height: {height}")
-        result = bmi(weight, height)
-    else:
-        result = 'fuck'
-    print(result)
-    quit()
-
 def master():
-    if option == 0:
-        while True:
-            try:
-                main_debug()
-            except KeyboardInterrupt:
-                print(f"\nProgram terminated.")
-                quit()
-    if option == 1:
-        weight, height = receive_input(option, 'kilograms', 'meters')
-        result = bmi(weight, height)
-    elif option == 2:
-        weight, height_feet, height_inches = receive_input(option, 'pounds', 'feet (inches is optional)')
-        weight, height = lb_to_kg(weight), ft_and_inch_to_m(height_feet, height_inches)
-        result = bmi(weight, height)
-    else:
-        result = 'fuck'
-    print(result)
+    try:
+        if option == 0:
+            print("\n>>> AUTOMATIC TESTING MODE ACTIVE")
+            test_bmi()
+            quit()
+        if option == 1:
+            weight, height = receive_input(option, 'kilograms', 'meters')
+            logging.debug(f"option 1 > receive_input() returned weight: {weight} | height: {height}")
+            result = bmi(weight, height)
+        elif option == 2:
+            weight, height_feet, height_inches = receive_input(option, 'pounds', 'feet (inches is optional)')
+            logging.debug(f"option 2 > receive_input() returned weight: {weight} | height feet: {height_feet} | height inches: {height_inches}")
+            weight, height = lb_to_kg(weight), ft_and_inch_to_m(height_feet, height_inches)
+            logging.debug(f"option 2 > lb_to_kg() returned weight: {weight}")
+            logging.debug(f"option 2 > ft_and_inch_to_m() returned height: {height}")
+            result = bmi(weight, height)
+        else:
+            result = 'fuck'
+
+        if result:
+            print(result)
+        else:
+            raise Exception(f"ERROR: Invalid data.")
+    except Exception as e:
+        print(e)
 
 if __name__ == "__main__":
     while True:
         try:
-            option = choose_option(3, 
-"""=== BODY MASS INDEX CALCULATOR ===
+            OPTIONS = [0, 1, 2, 9]
+            menu = """
+===== BODY MASS INDEX CALCULATOR =====
 
-Choose the measurement unit (or press CTRL-C to exit):
-0. Activate debugging mode
+Choose the measurement unit:
+0. Activate automatic testing mode
 1. Metric: kilograms, meters (Default)
-2. Imperial: pounds, feet, inches""")
-            main()
+2. Imperial: pounds, feet, inches
+CTRL-C to quit
+======================================"""
+
+            option = choose_option(OPTIONS, menu)
+
+            if option == 9:
+                logging.getLogger().setLevel(logging.DEBUG)
+                print("\n>>> DEBUGGING MODE ACTIVE")
+                option = choose_option(OPTIONS, '')
+            master()
+            sleep(2)
         except KeyboardInterrupt:
             print(f"\nProgram terminated.")
+            quit()
