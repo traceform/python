@@ -1,6 +1,6 @@
 import re
 
-def bmi(weight, height):
+def bmi(weight: float, height: float) -> float:
     """
     Calculates the Body Mass Index based on
     given weight (kg) and height (meters)
@@ -16,7 +16,7 @@ def bmi(weight, height):
                 return None
     return None
 
-def receive_input(option, weight_text, height_text):
+def receive_input(option: int, weight_text: str, height_text: str) -> :
     # Validating weight input
     while True:
         try:
@@ -64,17 +64,17 @@ def receive_input(option, weight_text, height_text):
         
     return weight, height
 
-def lb_to_kg(pounds):
+def lb_to_kg(pounds: float) -> float:
     """Converts pounds to kilograms"""
     #print(f"[DEBUG] pounds: {pounds}, type: {type(pounds)}")
     return pounds * 0.45359237
 
-def ft_and_inch_to_m(feet, inches = 0.0):
+def ft_and_inch_to_m(feet: int, inches: int = 0) -> float:
     """Converts feet and inches to meters"""
     #print(f"[DEBUG] feet: {feet}, type: {type(feet)} | inches: {inches}, type: {type(inches)}")
     return feet * 0.3048 + inches * 0.0254
 
-def choose_option(options, prompt, number = 1):
+def choose_option(options: int, prompt: str, default_option = 1):
     """Returns a valid option to continue"""
     option_list = []
     for n in range(options + 1):
@@ -87,14 +87,14 @@ def choose_option(options, prompt, number = 1):
 
     while True:
         try:
-            received_number = input(f"Choose a{_} option: ")
+            number = input(f"Choose a{_} option: ")
             # If the user presses ENTER, return default option number
-            if received_number == '':
-                return number
+            if number == '':
+                return default_option
             # If the user inputted value is valid, return value
-            received_number = int(received_number)
-            if received_number in option_list:
-                return received_number
+            number = int(number)
+            if number in option_list:
+                return number
             else:
                 _ = ' valid'
         except ValueError:
@@ -123,44 +123,37 @@ def test_bmi():
         print(f" | Result: {output}", end='')
         print()
 
-def main():
-
-if __name__ == "__main__":
-    option = choose_option(3, """
-=== BODY MASS INDEX CALCULATOR ===
-
-Choose the measurement unit:
-1. Metric: kilograms, meters (Default)
-2. Imperial: pounds, feet, inches""")
-
+def main_debug():
+    print("\n>>> DEBUGGING MODE ACTIVE")
+    print(f"[DEBUG] choose_option() returned option: {option}")
     if option == 0:
-        print(">>> DEBUGGING MODE ACTIVE")
-        option = choose_option(3, """
-    === BODY MASS INDEX CALCULATOR ===
-
-    Choose the measurement unit:
-    1. Metric: kilograms, meters (Default)
-    2. Imperial: pounds, feet, inches""")
-        print(f"[DEBUG] choose_option() returned option: {option}")
-        if option == 0:
-            print(">>> TESTING MODE ACTIVE")
-            test_bmi()
-            quit()
-        if option == 1:
-            weight, height = receive_input(option, 'kilograms', 'meters')
-            print(f"[DEBUG] option 1 > receive_input() returned weight: {weight} | height: {height}")
-            result = bmi(weight, height)
-        elif option == 2:
-            weight, height_feet, height_inches = receive_input(option, 'pounds', 'feet (inches is optional)')
-            print(f"[DEBUG] option 2 > receive_input() returned weight: {weight} | height feet: {height_feet} | height inches: {height_inches}")
-            weight, height = lb_to_kg(weight), ft_and_inch_to_m(height_feet, height_inches)
-            print(f"[DEBUG] option 2 > lb_to_kg() returned weight: {weight}")
-            print(f"[DEBUG] option 2 > ft_and_inch_to_m() returned height: {height}")
-            result = bmi(weight, height)
-        else:
-            result = 'fuck'
-        print(result)
+        print("\n>>> AUOMATIC TESTING MODE ACTIVE")
+        test_bmi()
         quit()
+    if option == 1:
+        weight, height = receive_input(option, 'kilograms', 'meters')
+        print(f"[DEBUG] option 1 > receive_input() returned weight: {weight} | height: {height}")
+        result = bmi(weight, height)
+    elif option == 2:
+        weight, height_feet, height_inches = receive_input(option, 'pounds', 'feet (inches is optional)')
+        print(f"[DEBUG] option 2 > receive_input() returned weight: {weight} | height feet: {height_feet} | height inches: {height_inches}")
+        weight, height = lb_to_kg(weight), ft_and_inch_to_m(height_feet, height_inches)
+        print(f"[DEBUG] option 2 > lb_to_kg() returned weight: {weight}")
+        print(f"[DEBUG] option 2 > ft_and_inch_to_m() returned height: {height}")
+        result = bmi(weight, height)
+    else:
+        result = 'fuck'
+    print(result)
+    quit()
+
+def main():
+    if option == 0:
+        while True:
+            try:
+                main_debug()
+            except KeyboardInterrupt:
+                print(f"\nProgram terminated.")
+                quit()
     if option == 1:
         weight, height = receive_input(option, 'kilograms', 'meters')
         result = bmi(weight, height)
@@ -171,4 +164,17 @@ Choose the measurement unit:
     else:
         result = 'fuck'
     print(result)
-        
+
+if __name__ == "__main__":
+    while True:
+        try:
+            option = choose_option(3, 
+"""=== BODY MASS INDEX CALCULATOR ===
+
+Choose the measurement unit (or press CTRL-C to exit):
+0. Activate debugging mode
+1. Metric: kilograms, meters (Default)
+2. Imperial: pounds, feet, inches""")
+            main()
+        except KeyboardInterrupt:
+            print(f"\nProgram terminated.")
