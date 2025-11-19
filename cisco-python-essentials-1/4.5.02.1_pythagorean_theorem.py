@@ -1,10 +1,12 @@
 import logging
 
+
 # Basic logging configuration
 logging.basicConfig(
     level=logging.INFO,   # Change to show debug and above
     format="[%(levelname)s] %(message)s"
 )
+
 
 # --- Utility functions ---
 def is_a_triangle(a, b, c):
@@ -43,6 +45,7 @@ def area_of_triangle(a, b, c):
         return None
     return heron(a, b, c)
 
+
 # --- Input/output functions ---
 def receive_sides():
     """Receives and validates the given sides"""
@@ -67,6 +70,7 @@ def receive_sides():
         except:
             print("Invalid operation, try again. ", end='')
     return sides[0], sides[1], sides[2]
+
 
 # --- Test functions ---
 def test_function(function, sample_a, sample_b, sample_c, expected_output):
@@ -97,25 +101,40 @@ def test_is_a_triangle():
     expected_output = [True, False, True,      False,     False,         False,       False]
     #                                     degenerate, zero side, negative side, non-numeric
 
-    return test_function('is_a_triangle', sample_a, sample_b, sample_c, expected_output)
+    return test_function(function, sample_a, sample_b, sample_c, expected_output)
 
 def test_is_a_right_triangle():
-    function = is_a_triangle
+    function = is_a_right_triangle
     sample_a = [          5,     1]
     sample_b = [          3,     3]
     sample_c = [          4,     4]
     expected_output = [True, False]
 
-    return test_function('is_a_right_triangle', sample_a, sample_b, sample_c, expected_output)
+    return test_function(function, sample_a, sample_b, sample_c, expected_output)
 
+def test_area_of_triangle():
+    function = area_of_triangle
+    sample_a = [                        1.]
+    sample_b = [                        1.]
+    sample_c = [                  2. ** .5]
+    expected_output = [0.49999999999999983]
+
+    return test_function(function, sample_a, sample_b, sample_c, expected_output)
+
+
+# --- Master ---
 if __name__ == '__main__':
     # Testing
     #test_is_a_triangle()
+    #test_is_a_right_triangle()
+    #test_area_of_triangle()
+
 
     print("""
-======= TRIANGLE VALIDATOR =======
-Check if a given triangle is valid
-and see if it's a right triangle!
+==== TRIANGLE VALIDATOR ====
+Check if a triangle is valid,
+see if it's a right triangle
+and calculate its area!
 """)
 
     a, b, c = receive_sides()
@@ -124,6 +143,9 @@ and see if it's a right triangle!
 
         if is_a_right_triangle(a, b, c):
             print(f" A right triangle.")
+
+        area = area_of_triangle(a, b, c)
+        if area:
+            print(f"Area of the triangle: {area}")
     else:
         print(f"{a}, {b} and {c} DO NOT make a triangle.")
-    
