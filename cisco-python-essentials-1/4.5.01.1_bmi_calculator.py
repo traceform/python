@@ -131,6 +131,7 @@ def choose_option(options: list, prompt: str, default_option = 1) -> int:
         except KeyboardInterrupt:
             raise KeyboardInterrupt
 
+# --- Test functions ---
 def test_bmi():
     function = bmi
     sample_weight = [                52.5, 352.5,          lb_to_kg(176)]
@@ -188,7 +189,7 @@ def master():
 
     sleep(3)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     DEBUGGING_ON = False
     OPTIONS = [0, 1, 2, 9]
     menu = """
