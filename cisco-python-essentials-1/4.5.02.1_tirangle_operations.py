@@ -121,15 +121,8 @@ def test_area_of_triangle():
 
     return test_function(function, sample_a, sample_b, sample_c, expected_output)
 
-
 # --- Master ---
-if __name__ == '__main__':
-    # Testing
-    #test_is_a_triangle()
-    #test_is_a_right_triangle()
-    #test_area_of_triangle()
-
-
+def master():
     print("""
 ==== TRIANGLE VALIDATOR ====
 Check if a triangle is valid,
@@ -149,3 +142,11 @@ and calculate its area!
             print(f"Area of the triangle: {area}")
     else:
         print(f"{a}, {b} and {c} DO NOT make a triangle.")
+
+if __name__ == '__main__':
+    # Testing
+    #test_is_a_triangle()
+    #test_is_a_right_triangle()
+    #test_area_of_triangle()
+
+    master()
