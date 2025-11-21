@@ -18,9 +18,22 @@ def fib(num):
             else:
                 # Rule: each Fibonacci number is the sum
                 # of the two previous Fibonacci numbers
-                fibonacci = 1
-                for n in range(num, num + 1):
-                    return fib(n - 1) + fib(n - 2)
+                #
+                # WARNING: The following code was removed
+                # because of optimization issues when
+                # calculating fibonacci numbers over 20
+                #
+                #fibonacci = 1
+                #for n in range(num, num + 1):
+                #    return fib(n - 1) + fib(n - 2)
+                #
+                # Optimized code:
+                penultimate = last = 1
+                next_fibonacci = 0
+                for i in range(3, num + 1):
+                    next_fibonacci = penultimate + last
+                    penultimate, last = last, next_fibonacci
+                return next_fibonacci
 
 # --- Input/output functions ---
 def receive_num() -> int:
@@ -78,6 +91,10 @@ def test_fib():
 
 # --- Master ---
 def master():
+    print("""
+==== FIBONACCI CALCULATOR ====
+Calculate any Fibonacci number!
+""")
     n = receive_num()
     print(fib(n))
 
