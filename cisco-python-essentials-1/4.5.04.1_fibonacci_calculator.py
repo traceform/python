@@ -1,5 +1,5 @@
 # --- Utility functions ---
-def fib(num):
+def fib(num: int) -> int:
     """Returns the fibonacci of a given number"""
     # Must be an integer
     if not isinstance(num, int):
@@ -91,12 +91,12 @@ def test_fib():
 
 # --- Master ---
 def master():
-    print("""
+    print("""\
 ==== FIBONACCI CALCULATOR ====
 Calculate any Fibonacci number!
 """)
     n = receive_num()
-    print(fib(n))
+    print(f"{n} -> {fib(n)}")
 
 if __name__ == '__main__':
     # Debugging

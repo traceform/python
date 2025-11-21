@@ -123,7 +123,7 @@ def test_area_of_triangle():
 
 # --- Master ---
 def master():
-    print("""
+    print("""\
 ==== TRIANGLE VALIDATOR ====
 Check if a triangle is valid,
 see if it's a right triangle

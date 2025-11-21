@@ -60,7 +60,7 @@ def test_actorial_function():
 
 # --- Master ---
 def master():
-    print("""
+    print("""\
 === FACTORIAL CALCULATOR ===
 Calculate the factorial of
 any non-integer number!
