@@ -60,6 +60,12 @@ def test_actorial_function():
 
 # --- Master ---
 def master():
+    print("""
+=== FACTORIAL CALCULATOR ===
+Calculate the factorial of
+any non-integer number!
+""")
+
     n = receive_num()
     factorial = factorial_function(n)
     if factorial:
